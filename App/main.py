@@ -2,55 +2,7 @@ import sys
 import App.RobotCommand as RobotCommand
 import App.Geometry as Geometry
 import App.RobotModel as RobotModel
-
-
-class PlaceCommandRequest(RobotCommand.Request):
-    def __init__(self):
-        super().__init__()
-        self.__position = Geometry.Point()
-        self.__orientation = Geometry.Orientation.INVALID
-
-    def get_position(self):
-        return self.__position
-
-    def set_position(self, point):
-        self.__position = point
-
-    def get_orientation(self):
-        return self.__orientation
-
-    def set_orientation(self, orientation):
-        self.__orientation = orientation
-
-    def is_valid(self):
-        return all([super().is_valid(),
-                   self.__position.is_valid(),
-                   self.__orientation.is_valid()])
-
-
-class PlaceCommandResponse(RobotCommand.Response):
-    def __init__(self):
-        super().__init__()
-
-
-class PlaceCommandExecutor(RobotCommand.Executor):
-    def execute(self, request):
-        response = super().execute(request)
-        if not response.is_error():
-            PlaceCommandExecutor.__execute_place(request, response)
-        return response
-
-    @staticmethod
-    def __execute_place(request, response):
-        if RobotModel.world_model.get_board().is_valid_position(request.get_position()):
-            robot = RobotModel.world_model.get_robot()
-            robot.set_position(request.get_position())
-            robot.set_orientation(request.get_orientation())
-        else:
-            response.set_error_message("Invalid position.")
-
-    def _create_response(self):
-        return PlaceCommandResponse()
+import App.PlaceCommand as PlaceCommand
 
 
 class ReportCommandRequest(RobotCommand.Request):
@@ -99,25 +51,7 @@ class ReportCommandExecutor(RobotCommand.Executor):
         return ReportCommandResponse()
 
 
-class CommandDefinition:
-    def __init__(self, request_class, executor_class, custom_request_setter, command_output_generator):
-        self.request_class = request_class
-        self.executor_class = executor_class
-        self.custom_request_setter = custom_request_setter
-        self.command_output_generator = command_output_generator
-
-
-def place_command_setter(arguments, place_request):
-    if len(arguments) == 3:
-        place_request.set_position(Geometry.Point(int(arguments[0]), int(arguments[1])))
-        place_request.set_orientation(Geometry.Orientation[arguments[2]])
-
-
 def report_command_setter(arguments, report_request):
-    pass
-
-
-def place_command_print(response):
     pass
 
 
@@ -133,8 +67,8 @@ def report_command_print(response):
 class CommandRegister:
     def __init__(self):
         self.command_name_to_definition = {}
-        self.set_command_definition('PLACE', CommandDefinition(PlaceCommandRequest, PlaceCommandExecutor, place_command_setter, place_command_print))
-        self.set_command_definition('REPORT', CommandDefinition(ReportCommandRequest, ReportCommandExecutor, report_command_setter, report_command_print))
+        self.set_command_definition('PLACE', PlaceCommand.get_command_definition())
+        self.set_command_definition('REPORT', RobotCommand.CommandDefinition(ReportCommandRequest, ReportCommandExecutor, report_command_setter, report_command_print))
 
     def get_command_definition(self, command_name):
         return self.command_name_to_definition.get(command_name, None)
