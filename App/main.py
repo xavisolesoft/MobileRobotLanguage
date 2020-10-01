@@ -59,7 +59,7 @@ class RobotCommandResponse:
 
     def __init__(self):
         self.__command_id = INVALID_COMMAND_ID
-        self.__error_message = INVALID_ERROR_MESSAGE
+        self.__error_message = self.INVALID_ERROR_MESSAGE
 
     def get_id(self):
         return self.__command_id
@@ -81,7 +81,7 @@ class RobotCommandResponse:
 
     def is_valid(self):
         return all([self.__command_id != INVALID_COMMAND_ID,
-                    self.__error_message != INVALID_ERROR_MESSAGE])
+                    self.__error_message != self.INVALID_ERROR_MESSAGE])
 
     def print_output(self):
         pass
