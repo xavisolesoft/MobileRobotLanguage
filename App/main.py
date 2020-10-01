@@ -249,7 +249,7 @@ class WorldModel:
         return self.__board
 
 
-class InterpreterCommandEntry:
+class CommandDefinition:
     def __init__(self, request_class, executor_class, custom_request_setter):
         self.request_class = request_class
         self.executor_class = executor_class
@@ -266,21 +266,30 @@ def report_setter(arguments, report_request):
     pass
 
 
-class Interpreter:
-    command_token_to_request = {
-        'PLACE': InterpreterCommandEntry(PlaceCommandRequest, PlaceCommandExecutor, place_setter),
-        'REPORT': InterpreterCommandEntry(ReportCommandRequest, ReportCommandExecutor, report_setter)
-    }
+class CommandRegister:
+    def __init__(self):
+        self.command_name_to_definition = {}
+        self.set_command_definition('PLACE', CommandDefinition(PlaceCommandRequest, PlaceCommandExecutor, place_setter))
+        self.set_command_definition('REPORT', CommandDefinition(ReportCommandRequest, ReportCommandExecutor, report_setter))
 
+    def get_command_definition(self, command_name):
+        return self.command_name_to_definition.get(command_name, None)
+
+    def set_command_definition(self, command_name, command_definition):
+        self.command_name_to_definition[command_name] = command_definition
+
+
+class Interpreter:
     def __init__(self):
         self.__next_command_id = 0
+        self.command_register = CommandRegister()
 
     def execute_line(self, line):
         command_name, arguments = Interpreter.__extract_command(line)
-        interpreter_command_entry = self.command_token_to_request.get(command_name, None)
-        if interpreter_command_entry:
-            request = self.__create_command_request(interpreter_command_entry, arguments)
-            return self.__execute_command_request(interpreter_command_entry, request)
+        command_definition = self.command_register.get_command_definition(command_name)
+        if command_definition:
+            request = self.__create_command_request(command_definition, arguments)
+            return self.__execute_command_request(command_definition, request)
         return None
 
     @staticmethod
@@ -293,15 +302,15 @@ class Interpreter:
             arguments = tokens[1:]
         return command_name, arguments
 
-    def __create_command_request(self, interpreter_command_entry, arguments):
-        request = interpreter_command_entry.request_class()
+    def __create_command_request(self, command_definition, arguments):
+        request = command_definition.request_class()
         request.set_id(self.__get_next_command_id())
-        interpreter_command_entry.custom_request_setter(arguments, request)
+        command_definition.custom_request_setter(arguments, request)
         return request
 
     @staticmethod
-    def __execute_command_request(interpreter_command_entry, request):
-        executor = interpreter_command_entry.executor_class()
+    def __execute_command_request(command_definition, request):
+        executor = command_definition.executor_class()
         return executor.execute(request)
 
     def __get_next_command_id(self):
