@@ -1,9 +1,7 @@
 import sys
 from enum import Enum
-import re
 
 INVALID_COMMAND_ID = -1
-INVALID_ERROR_MESSAGE = "INVALID ERROR MESSAGE"
 
 
 class Orientation(Enum):
@@ -41,6 +39,8 @@ class Point:
 
 
 class RobotCommandRequest:
+    INVALID_COMMAND_ID = -1
+
     def __init__(self):
         self.__command_id = INVALID_COMMAND_ID
 
@@ -55,6 +55,8 @@ class RobotCommandRequest:
 
 
 class RobotCommandResponse:
+    INVALID_ERROR_MESSAGE = "INVALID ERROR MESSAGE"
+
     def __init__(self):
         self.__command_id = INVALID_COMMAND_ID
         self.__error_message = INVALID_ERROR_MESSAGE
@@ -182,7 +184,7 @@ class ReportCommandResponse(RobotCommandResponse):
 
     def print_output(self):
         if self.is_valid():
-            print(f"{self.__position.get_x():d},{self.__position.get_y():d},{self.__orientation._name_:s}")
+            print(f"{self.__position.get_x():d},{self.__position.get_y():d},{self.__orientation.name:s}")
         else:
             print("not in place")
 
