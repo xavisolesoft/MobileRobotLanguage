@@ -1,7 +1,6 @@
 import sys
 from enum import Enum
-
-INVALID_COMMAND_ID = -1
+import App.RobotCommand as RobotCommand
 
 
 class Orientation(Enum):
@@ -38,74 +37,7 @@ class Point:
         return self.INVALID_POS not in [self.__x, self.__y]
 
 
-class RobotCommandRequest:
-    INVALID_COMMAND_ID = -1
-
-    def __init__(self):
-        self.__command_id = INVALID_COMMAND_ID
-
-    def get_id(self):
-        return self.__command_id
-
-    def set_id(self, command_id):
-        self.__command_id = command_id
-
-    def is_valid(self):
-        return self.__command_id != INVALID_COMMAND_ID
-
-
-class RobotCommandResponse:
-    INVALID_ERROR_MESSAGE = "INVALID ERROR MESSAGE"
-
-    def __init__(self):
-        self.__command_id = INVALID_COMMAND_ID
-        self.__error_message = self.INVALID_ERROR_MESSAGE
-
-    def get_id(self):
-        return self.__command_id
-
-    def set_id(self, command_id):
-        self.__command_id = command_id
-
-    def get_error_message(self):
-        return self.__error_message
-
-    def set_error_message(self, error_message):
-        self.__error_message = error_message
-
-    def is_error(self):
-        return self.__error_message
-
-    def set_no_error(self):
-        self.__error_message = ""
-
-    def is_valid(self):
-        return all([self.__command_id != INVALID_COMMAND_ID,
-                    self.__error_message != self.INVALID_ERROR_MESSAGE])
-
-    def print_output(self):
-        pass
-
-
-class RobotCommandExecutor:
-    def execute(self, robot_command_request):
-        robot_command_response = self._create_response()
-        robot_command_response.set_id(robot_command_request.get_id())
-        self.__set_error_message(robot_command_response, robot_command_request)
-        return robot_command_response
-
-    @staticmethod
-    def __set_error_message(robot_command_response, robot_command_request):
-        if not robot_command_request.is_valid():
-            robot_command_request.set_error_message("Invalid request.")
-        else:
-            robot_command_response.set_no_error()
-
-    def _create_response(self):
-        raise NotImplementedError()
-
-
-class PlaceCommandRequest(RobotCommandRequest):
+class PlaceCommandRequest(RobotCommand.Request):
     def __init__(self):
         super().__init__()
         self.__position = Point()
@@ -129,12 +61,12 @@ class PlaceCommandRequest(RobotCommandRequest):
                    self.__orientation.is_valid()])
 
 
-class PlaceCommandResponse(RobotCommandResponse):
+class PlaceCommandResponse(RobotCommand.Response):
     def __init__(self):
         super().__init__()
 
 
-class PlaceCommandExecutor(RobotCommandExecutor):
+class PlaceCommandExecutor(RobotCommand.Executor):
     def execute(self, request):
         response = super().execute(request)
         if not response.is_error():
@@ -154,12 +86,12 @@ class PlaceCommandExecutor(RobotCommandExecutor):
         return PlaceCommandResponse()
 
 
-class ReportCommandRequest(RobotCommandRequest):
+class ReportCommandRequest(RobotCommand.Request):
     def __init__(self):
         super().__init__()
 
 
-class ReportCommandResponse(RobotCommandResponse):
+class ReportCommandResponse(RobotCommand.Response):
     def __init__(self):
         super().__init__()
         self.__position = Point()
@@ -182,14 +114,8 @@ class ReportCommandResponse(RobotCommandResponse):
                     self.__position.is_valid(),
                     self.__orientation.is_valid()])
 
-    def print_output(self):
-        if self.is_valid():
-            print(f"{self.__position.get_x():d},{self.__position.get_y():d},{self.__orientation.name:s}")
-        else:
-            print("not in place")
 
-
-class ReportCommandExecutor(RobotCommandExecutor):
+class ReportCommandExecutor(RobotCommand.Executor):
     def execute(self, request):
         response = super().execute(request)
         if not response.is_error():
@@ -250,27 +176,41 @@ class WorldModel:
 
 
 class CommandDefinition:
-    def __init__(self, request_class, executor_class, custom_request_setter):
+    def __init__(self, request_class, executor_class, custom_request_setter, command_output_generator):
         self.request_class = request_class
         self.executor_class = executor_class
         self.custom_request_setter = custom_request_setter
+        self.command_output_generator = command_output_generator
 
 
-def place_setter(arguments, place_request):
+def place_command_setter(arguments, place_request):
     if len(arguments) == 3:
         place_request.set_position(Point(int(arguments[0]), int(arguments[1])))
         place_request.set_orientation(Orientation[arguments[2]])
 
 
-def report_setter(arguments, report_request):
+def report_command_setter(arguments, report_request):
     pass
+
+
+def place_command_print(response):
+    pass
+
+
+def report_command_print(response):
+    if response.is_valid():
+        print(f"{response.get_position().get_x():d},"
+              f"{response.get_position().get_y():d},"
+              f"{response.get_orientation().name:s}")
+    else:
+        print("not in place")
 
 
 class CommandRegister:
     def __init__(self):
         self.command_name_to_definition = {}
-        self.set_command_definition('PLACE', CommandDefinition(PlaceCommandRequest, PlaceCommandExecutor, place_setter))
-        self.set_command_definition('REPORT', CommandDefinition(ReportCommandRequest, ReportCommandExecutor, report_setter))
+        self.set_command_definition('PLACE', CommandDefinition(PlaceCommandRequest, PlaceCommandExecutor, place_command_setter, place_command_print))
+        self.set_command_definition('REPORT', CommandDefinition(ReportCommandRequest, ReportCommandExecutor, report_command_setter, report_command_print))
 
     def get_command_definition(self, command_name):
         return self.command_name_to_definition.get(command_name, None)
@@ -288,9 +228,8 @@ class Interpreter:
         command_name, arguments = Interpreter.__extract_command(line)
         command_definition = self.command_register.get_command_definition(command_name)
         if command_definition:
-            request = self.__create_command_request(command_definition, arguments)
-            return self.__execute_command_request(command_definition, request)
-        return None
+            return self.__execute_command(command_definition, arguments)
+        return ""
 
     @staticmethod
     def __extract_command(line):
@@ -301,6 +240,11 @@ class Interpreter:
             command_name = tokens[0]
             arguments = tokens[1:]
         return command_name, arguments
+
+    def __execute_command(self, command_definition, arguments):
+        request = self.__create_command_request(command_definition, arguments)
+        response = self.__execute_command_request(command_definition, request)
+        return command_definition.command_output_generator(response)
 
     def __create_command_request(self, command_definition, arguments):
         request = command_definition.request_class()
@@ -325,9 +269,9 @@ world_model = WorldModel()
 def main():
     interpreter = Interpreter()
     for line in sys.stdin:
-        response = interpreter.execute_line(line.strip())
-        if response:
-            response.print_output()
+        output_message = interpreter.execute_line(line.strip())
+        if output_message:
+            print(output_message)
 
 
 if __name__ == "__main__":
