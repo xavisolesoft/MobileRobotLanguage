@@ -1,47 +1,14 @@
 import sys
-from enum import Enum
 import App.RobotCommand as RobotCommand
-
-
-class Orientation(Enum):
-    INVALID = 0
-    NORTH = 1
-    EAST = 2
-    SOUTH = 3
-    WEST = 4
-
-    def is_valid(self):
-        return self != self.INVALID
-
-
-class Point:
-    INVALID_POS = -1
-
-    def __init__(self, x=INVALID_POS, y=INVALID_POS):
-        self.__x = x
-        self.__y = y
-
-    def get_x(self):
-        return self.__x
-
-    def get_y(self):
-        return self.__y
-
-    def set_x(self, x):
-        self.__x = x
-
-    def set_y(self, y):
-        self.__y = y
-
-    def is_valid(self):
-        return self.INVALID_POS not in [self.__x, self.__y]
+import App.Geometry as Geometry
+import App.RobotModel as RobotModel
 
 
 class PlaceCommandRequest(RobotCommand.Request):
     def __init__(self):
         super().__init__()
-        self.__position = Point()
-        self.__orientation = Orientation.INVALID
+        self.__position = Geometry.Point()
+        self.__orientation = Geometry.Orientation.INVALID
 
     def get_position(self):
         return self.__position
@@ -75,8 +42,8 @@ class PlaceCommandExecutor(RobotCommand.Executor):
 
     @staticmethod
     def __execute_place(request, response):
-        if world_model.get_board().is_valid_position(request.get_position()):
-            robot = world_model.get_robot()
+        if RobotModel.world_model.get_board().is_valid_position(request.get_position()):
+            robot = RobotModel.world_model.get_robot()
             robot.set_position(request.get_position())
             robot.set_orientation(request.get_orientation())
         else:
@@ -94,8 +61,8 @@ class ReportCommandRequest(RobotCommand.Request):
 class ReportCommandResponse(RobotCommand.Response):
     def __init__(self):
         super().__init__()
-        self.__position = Point()
-        self.__orientation = Orientation.INVALID
+        self.__position = Geometry.Point()
+        self.__orientation = Geometry.Orientation.INVALID
 
     def get_position(self):
         return self.__position
@@ -124,55 +91,12 @@ class ReportCommandExecutor(RobotCommand.Executor):
 
     @staticmethod
     def __execute_report(response):
-        robot = world_model.get_robot()
+        robot = RobotModel.world_model.get_robot()
         response.set_position(robot.get_position())
         response.set_orientation(robot.get_orientation())
 
     def _create_response(self):
         return ReportCommandResponse()
-
-
-class MobileRobot:
-    def __init__(self):
-        self.__position = Point()
-        self.__orientation = Orientation.INVALID
-
-    def get_position(self):
-        return self.__position
-
-    def set_position(self, point):
-        self.__position = point
-
-    def get_orientation(self):
-        return self.__orientation
-
-    def set_orientation(self, orientation):
-        self.__orientation = orientation
-
-
-class Board:
-    MIN_POSITION = Point(0, 0)
-    MAX_POSITION = Point(4, 4)
-
-    def is_valid_position(self, position):
-        return all([
-            self.MIN_POSITION.get_x() <= position.get_x(),
-            self.MIN_POSITION.get_y() <= position.get_y(),
-            self.MAX_POSITION.get_x() >= position.get_x(),
-            self.MAX_POSITION.get_y() >= position.get_y()
-        ])
-
-
-class WorldModel:
-    def __init__(self):
-        self.__robot = MobileRobot()
-        self.__board = Board()
-
-    def get_robot(self):
-        return self.__robot
-
-    def get_board(self):
-        return self.__board
 
 
 class CommandDefinition:
@@ -185,8 +109,8 @@ class CommandDefinition:
 
 def place_command_setter(arguments, place_request):
     if len(arguments) == 3:
-        place_request.set_position(Point(int(arguments[0]), int(arguments[1])))
-        place_request.set_orientation(Orientation[arguments[2]])
+        place_request.set_position(Geometry.Point(int(arguments[0]), int(arguments[1])))
+        place_request.set_orientation(Geometry.Orientation[arguments[2]])
 
 
 def report_command_setter(arguments, report_request):
@@ -261,9 +185,6 @@ class Interpreter:
         current_id = self.__next_command_id
         self.__next_command_id += 1
         return current_id
-
-
-world_model = WorldModel()
 
 
 def main():
