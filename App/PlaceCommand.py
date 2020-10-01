@@ -52,17 +52,13 @@ class CommandExecutor(RobotCommand.Executor):
         return CommandResponse()
 
 
-def place_command_setter(arguments, place_request):
+def command_setter(arguments, place_request):
     if len(arguments) == 3:
         place_request.set_position(Geometry.Point(int(arguments[0]), int(arguments[1])))
         place_request.set_orientation(Geometry.Orientation[arguments[2]])
 
 
-def report_command_setter(arguments, report_request):
-    pass
-
-
-def place_command_print(response):
+def command_print(response):
     pass
 
 
@@ -70,5 +66,5 @@ def get_command_definition():
     return \
         RobotCommand.CommandDefinition(CommandRequest,
                                        CommandExecutor,
-                                       place_command_setter,
-                                       place_command_print)
+                                       command_setter,
+                                       command_print)
