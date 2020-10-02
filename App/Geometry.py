@@ -1,4 +1,5 @@
 from enum import Enum
+import sys
 
 
 class Orientation(Enum):
@@ -11,9 +12,19 @@ class Orientation(Enum):
     def is_valid(self):
         return self != self.INVALID
 
+    def to_normalized_vector(self):
+        switcher = {
+            Orientation.INVALID: Point(),
+            Orientation.NORTH: Point(0, 1),
+            Orientation.EAST: Point(1, 0),
+            Orientation.SOUTH: Point(0, -1),
+            Orientation.WEST: Point(-1, 0)
+        }
+        return switcher.get(self)
+
 
 class Point:
-    INVALID_POS = -1
+    INVALID_POS = -sys.maxsize
 
     def __init__(self, x=INVALID_POS, y=INVALID_POS):
         self.__x = x
@@ -33,3 +44,6 @@ class Point:
 
     def is_valid(self):
         return self.INVALID_POS not in [self.__x, self.__y]
+
+    def __add__(self, other):
+        return Point(self.__x + other.__x, self.__y + other.__y)
