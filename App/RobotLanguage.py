@@ -2,6 +2,7 @@ import App.PlaceCommand as PlaceCommand
 import App.ReportCommand as ReportCommand
 import App.MoveCommand as MoveCommand
 import App.LeftCommand as LeftCommand
+import App.RightCommand as RightCommand
 
 
 class CommandRegister:
@@ -11,6 +12,7 @@ class CommandRegister:
         self.set_command_definition('REPORT', ReportCommand.get_command_definition())
         self.set_command_definition('MOVE', MoveCommand.get_command_definition())
         self.set_command_definition('LEFT', LeftCommand.get_command_definition())
+        self.set_command_definition('RIGHT', RightCommand.get_command_definition())
 
     def get_command_definition(self, command_name):
         return self.command_name_to_definition.get(command_name, None)

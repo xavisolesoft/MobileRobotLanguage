@@ -29,7 +29,7 @@ class Orientation(Enum):
         return Orientation(rotated)
 
     def get_right_rotated(self):
-        rotated = self.value - 1
+        rotated = self.value + 1
         if rotated > 4:
             rotated = 1
         return Orientation(rotated)
