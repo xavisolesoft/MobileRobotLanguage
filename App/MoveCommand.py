@@ -13,17 +13,19 @@ class CommandResponse(RobotCommand.Response):
 
 
 class CommandExecutor(RobotCommand.Executor):
+    def __init__(self, world_model):
+        self.__world_model = world_model
+
     def execute(self, request):
         response = super().execute(request)
         if not response.is_error():
-            CommandExecutor.__execute_move(request, response)
+            self.__execute_move(request, response)
         return response
 
-    @staticmethod
-    def __execute_move(request, response):
-        robot = RobotModel.world_model.get_robot()
+    def __execute_move(self, request, response):
+        robot = self.__world_model.get_robot()
         next_position = robot.get_position() + robot.get_orientation().to_normalized_vector()
-        if RobotModel.world_model.get_board().is_valid_position(next_position):
+        if self.__world_model.get_board().is_valid_position(next_position):
             robot.set_position(next_position)
         else:
             response.set_error_message("Invalid position.")

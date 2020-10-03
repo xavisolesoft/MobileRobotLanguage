@@ -42,6 +42,3 @@ class WorldModel:
 
     def get_board(self):
         return self.__board
-
-
-world_model = WorldModel()

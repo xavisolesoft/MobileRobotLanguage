@@ -13,15 +13,17 @@ class CommandResponse(RobotCommand.Response):
 
 
 class CommandExecutor(RobotCommand.Executor):
+    def __init__(self, world_model):
+        self.__world_model = world_model
+
     def execute(self, request):
         response = super().execute(request)
         if not response.is_error():
-            CommandExecutor.__execute_move(request, response)
+            self.__execute_move(request, response)
         return response
 
-    @staticmethod
-    def __execute_move(request, response):
-        robot = RobotModel.world_model.get_robot()
+    def __execute_move(self, request, response):
+        robot = self.__world_model.get_robot()
         next_orientation = robot.get_orientation().get_right_rotated()
         robot.set_orientation(next_orientation)
 
