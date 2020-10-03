@@ -29,7 +29,7 @@ class CommandExecutor(RobotCommand.Executor):
         return CommandResponse()
 
 
-def command_setter(arguments, place_request):
+def set_request_arguments_from_input_interpreter_arguments(arguments, place_request):
     pass
 
 
@@ -41,5 +41,5 @@ def get_command_definition():
     return \
         RobotCommand.CommandDefinition(CommandRequest,
                                        CommandExecutor,
-                                       command_setter,
+                                       set_request_arguments_from_input_interpreter_arguments,
                                        command_print)
