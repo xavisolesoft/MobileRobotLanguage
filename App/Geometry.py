@@ -22,6 +22,18 @@ class Orientation(Enum):
         }
         return switcher.get(self)
 
+    def get_left_rotated(self):
+        rotated = self.value - 1
+        if rotated < 1:
+            rotated = 4
+        return Orientation(rotated)
+
+    def get_right_rotated(self):
+        rotated = self.value - 1
+        if rotated > 4:
+            rotated = 1
+        return Orientation(rotated)
+
 
 class Point:
     INVALID_POS = -sys.maxsize
