@@ -58,7 +58,7 @@ def set_request_arguments_from_input_interpreter_arguments(arguments, place_requ
         place_request.set_orientation(Geometry.Orientation[arguments[2]])
 
 
-def print_command_interpreter_output(response):
+def command_interpreter_output_generator(response):
     pass
 
 
@@ -67,4 +67,4 @@ def get_command_definition():
         RobotCommand.CommandDefinition(CommandRequest,
                                        CommandExecutor,
                                        set_request_arguments_from_input_interpreter_arguments,
-                                       print_command_interpreter_output)
+                                       command_interpreter_output_generator)

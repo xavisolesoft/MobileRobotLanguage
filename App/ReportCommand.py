@@ -53,7 +53,7 @@ def set_request_arguments_from_input_interpreter_arguments(arguments, report_req
     pass
 
 
-def print_command_interpreter_output(response):
+def command_interpreter_output_generator(response):
     if response.is_valid():
         print(f"{response.get_position().get_x():d},"
               f"{response.get_position().get_y():d},"
@@ -67,4 +67,4 @@ def get_command_definition():
         RobotCommand.CommandDefinition(CommandRequest,
                                        CommandExecutor,
                                        set_request_arguments_from_input_interpreter_arguments,
-                                       print_command_interpreter_output)
+                                       command_interpreter_output_generator)

@@ -51,7 +51,7 @@ class Interpreter:
     def __create_command_request(self, command_definition, arguments):
         request = command_definition.request_class()
         request.set_id(self.__get_next_command_id())
-        command_definition.custom_request_setter(arguments, request)
+        command_definition.custom_interpreter_arguments_request_setter(arguments, request)
         return request
 
     @staticmethod

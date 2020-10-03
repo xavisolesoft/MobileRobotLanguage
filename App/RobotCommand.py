@@ -64,8 +64,8 @@ class Executor:
 
 
 class CommandDefinition:
-    def __init__(self, request_class, executor_class, custom_request_setter, command_output_generator):
+    def __init__(self, request_class, executor_class, custom_interpreter_arguments_request_setter, command_output_generator):
         self.request_class = request_class
         self.executor_class = executor_class
-        self.custom_request_setter = custom_request_setter
+        self.custom_interpreter_arguments_request_setter = custom_interpreter_arguments_request_setter
         self.command_output_generator = command_output_generator
