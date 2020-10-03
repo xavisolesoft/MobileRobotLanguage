@@ -2,7 +2,7 @@ import unittest
 import Test.FunctionalTest.Util as Util
 
 
-class MyTestCase(unittest.TestCase):
+class PlaceCommandTestCase(unittest.TestCase):
     def test_one_place(self):
         program = 'PLACE 1,2,NORTH\n' \
                   'REPORT\n'

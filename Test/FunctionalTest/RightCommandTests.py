@@ -2,7 +2,7 @@ import unittest
 import Test.FunctionalTest.Util as Util
 
 
-class MyTestCase(unittest.TestCase):
+class RightCommandTestCase(unittest.TestCase):
     def test_right_not_in_place(self):
         program = 'RIGHT\n' \
                   'REPORT\n'

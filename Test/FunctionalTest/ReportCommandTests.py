@@ -2,7 +2,7 @@ import unittest
 import Test.FunctionalTest.Util as Util
 
 
-class MyTestCase(unittest.TestCase):
+class ReportCommandTestCase(unittest.TestCase):
     def test_one_report(self):
         program = 'REPORT\n'
 

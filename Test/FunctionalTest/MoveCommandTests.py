@@ -2,7 +2,7 @@ import unittest
 import Test.FunctionalTest.Util as Util
 
 
-class MyTestCase(unittest.TestCase):
+class MoveCommandTestCase(unittest.TestCase):
     def test_move_not_in_place(self):
         program = 'MOVE\n' \
                   'REPORT\n'

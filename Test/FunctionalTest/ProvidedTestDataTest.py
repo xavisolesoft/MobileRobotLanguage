@@ -2,7 +2,7 @@ import unittest
 import Test.FunctionalTest.Util as Util
 
 
-class MyTestCase(unittest.TestCase):
+class ProvidedTestDataTestCase(unittest.TestCase):
     def test_1(self):
         program = 'MOVE\n' \
                   'LEFT\n' \
