@@ -35,8 +35,8 @@ class OrientationTestCase(unittest.TestCase):
 class PointTestCase(unittest.TestCase):
     def test_default_constructor(self):
         point = Geometry.Point()
-        self.assertEqual(Geometry.Point.INVALID_POS, point.get_x())
-        self.assertEqual(Geometry.Point.INVALID_POS, point.get_y())
+        self.assertEqual(Geometry.Point.INVALID_POSITION, point.get_x())
+        self.assertEqual(Geometry.Point.INVALID_POSITION, point.get_y())
 
     def test_x_y_constructor(self):
         x = 2
@@ -61,8 +61,8 @@ class PointTestCase(unittest.TestCase):
 
         self.assertTrue(Geometry.Point(), Geometry.Point() + Geometry.Point())
         self.assertTrue(Geometry.Point(), Geometry.Point(x) + Geometry.Point())
-        self.assertTrue(Geometry.Point(), Geometry.Point(Geometry.Point.INVALID_POS, y) + Geometry.Point(x))
-        self.assertTrue(Geometry.Point(), Geometry.Point(Geometry.Point.INVALID_POS, y) + Geometry.Point())
+        self.assertTrue(Geometry.Point(), Geometry.Point(Geometry.Point.INVALID_POSITION, y) + Geometry.Point(x))
+        self.assertTrue(Geometry.Point(), Geometry.Point(Geometry.Point.INVALID_POSITION, y) + Geometry.Point())
 
     def test_add_operator_valid_values(self):
         x = -100
@@ -97,7 +97,7 @@ class PointTestCase(unittest.TestCase):
 
         self.assertFalse(Geometry.Point().is_valid())
         self.assertFalse(Geometry.Point(x).is_valid())
-        self.assertFalse(Geometry.Point(Geometry.Point.INVALID_POS, y).is_valid())
+        self.assertFalse(Geometry.Point(Geometry.Point.INVALID_POSITION, y).is_valid())
         self.assertTrue(Geometry.Point(x, y))
 
 

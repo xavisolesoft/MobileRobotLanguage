@@ -50,9 +50,9 @@ class Orientation(Enum):
 
 
 class Point:
-    INVALID_POS = -sys.maxsize
+    INVALID_POSITION = -sys.maxsize
 
-    def __init__(self, x=INVALID_POS, y=INVALID_POS):
+    def __init__(self, x=INVALID_POSITION, y=INVALID_POSITION):
         self.__x = x
         self.__y = y
 
@@ -69,7 +69,7 @@ class Point:
         self.__y = y
 
     def is_valid(self):
-        return Point.INVALID_POS not in [self.__x, self.__y]
+        return Point.INVALID_POSITION not in [self.__x, self.__y]
 
     def __eq__(self, other):
         return all([self.__x == other.__x,
@@ -81,7 +81,7 @@ class Point:
 
     @staticmethod
     def __add_coordinate(self_position, other_position):
-        if Point.INVALID_POS in [self_position, other_position]:
-            return Point.INVALID_POS
+        if Point.INVALID_POSITION in [self_position, other_position]:
+            return Point.INVALID_POSITION
 
         return self_position + other_position
