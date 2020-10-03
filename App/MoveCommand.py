@@ -36,7 +36,7 @@ def set_request_arguments_from_input_interpreter_arguments(arguments, place_requ
     pass
 
 
-def command_print(response):
+def print_command_interpreter_output(response):
     pass
 
 
@@ -45,4 +45,4 @@ def get_command_definition():
         RobotCommand.CommandDefinition(CommandRequest,
                                        CommandExecutor,
                                        set_request_arguments_from_input_interpreter_arguments,
-                                       command_print)
+                                       print_command_interpreter_output)
