@@ -63,6 +63,9 @@ class PointTestCase(unittest.TestCase):
         self.assertTrue(Geometry.Point(), Geometry.Point(x) + Geometry.Point())
         self.assertTrue(Geometry.Point(), Geometry.Point(Geometry.Point.INVALID_POSITION, y) + Geometry.Point(x))
         self.assertTrue(Geometry.Point(), Geometry.Point(Geometry.Point.INVALID_POSITION, y) + Geometry.Point())
+        self.assertTrue(Geometry.Point(x + x), Geometry.Point(x) + Geometry.Point(x))
+        self.assertTrue(Geometry.Point(Geometry.Point.INVALID_POSITION, y),
+                        Geometry.Point(Geometry.Point.INVALID_POSITION, y) + Geometry.Point(Geometry.Point.INVALID_POSITION, y))
 
     def test_add_operator_valid_values(self):
         x = -100
