@@ -20,22 +20,49 @@ class MobileRobot:
 
 
 class Board:
-    MIN_POSITION = Geometry.Point(0, 0)
-    MAX_POSITION = Geometry.Point(4, 4)
+    def __init__(self, bottom_left=Geometry.Point(), top_right=Geometry.Point()):
+        self.__bottom_left = bottom_left
+        self.__top_right = top_right
+
+    def get_bottom_left(self):
+        return self.__bottom_left
+
+    def set_bottom_left(self, point):
+        self.__bottom_left = point
+
+    def get_top_right(self):
+        return self.__top_right
+
+    def set_top_right(self, point):
+        self.__top_right = point
+
+    def is_valid(self):
+        return all([
+            self.__bottom_left.is_valid(),
+            self.__top_right.is_valid()
+        ])
 
     def is_valid_position(self, position):
         return all([
-            self.MIN_POSITION.get_x() <= position.get_x(),
-            self.MIN_POSITION.get_y() <= position.get_y(),
-            self.MAX_POSITION.get_x() >= position.get_x(),
-            self.MAX_POSITION.get_y() >= position.get_y()
+            position.is_valid(),
+            self.is_valid(),
+            self.__bottom_left.get_x() <= position.get_x(),
+            self.__bottom_left.get_y() <= position.get_y(),
+            self.__top_right.get_x() >= position.get_x(),
+            self.__top_right.get_y() >= position.get_y()
+        ])
+
+    def __eq__(self, other):
+        return all([
+            self.__bottom_left == self.__bottom_left,
+            self.__top_right == self.__top_right
         ])
 
 
 class WorldModel:
     def __init__(self):
         self.__robot = MobileRobot()
-        self.__board = Board()
+        self.__board = Board(Geometry.Point(0, 0), Geometry.Point(4, 4))
 
     def get_robot(self):
         return self.__robot
