@@ -19,10 +19,10 @@ class CommandExecutor(RobotCommand.Executor):
     def execute(self, request):
         response = super().execute(request)
         if not response.is_error():
-            self.__execute_move(request, response)
+            self.__execute_move()
         return response
 
-    def __execute_move(self, request, response):
+    def __execute_move(self):
         robot = self.__world_model.get_robot()
         next_orientation = robot.get_orientation().get_right_rotated()
         robot.set_orientation(next_orientation)
