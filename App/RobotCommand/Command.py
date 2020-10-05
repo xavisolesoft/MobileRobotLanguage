@@ -17,6 +17,7 @@ class Request:
 
 class Response:
     INVALID_ERROR_MESSAGE = "INVALID ERROR MESSAGE"
+    INVALID_REQUEST_ERROR = "Invalid request."
 
     def __init__(self):
         self.__command_id = INVALID_COMMAND_ID
@@ -35,7 +36,7 @@ class Response:
         self.__error_message = error_message
 
     def is_error(self):
-        return self.__error_message
+        return self.__error_message != ""
 
     def set_no_error(self):
         self.__error_message = ""
@@ -55,7 +56,7 @@ class Executor:
     @staticmethod
     def __set_error_message(robot_command_response, robot_command_request):
         if not robot_command_request.is_valid():
-            robot_command_request.set_error_message("Invalid request.")
+            robot_command_response.set_error_message("Invalid request.")
         else:
             robot_command_response.set_no_error()
 
