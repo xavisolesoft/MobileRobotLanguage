@@ -50,13 +50,14 @@ class DefinitionCase(unittest.TestCase):
 
 class RegisterCase(unittest.TestCase):
     def test_set_get_definition(self):
+        command_name = "TEST"
         definition = Register.Definition()
         register = Register.Register()
-        self.assertEqual(None, register.get_command_definition())
+        self.assertEqual(None, register.get_command_definition(command_name))
 
-        register.set_command_definition("TEST", definition)
+        register.set_command_definition(command_name, definition)
 
-        self.assertEqual(definition, register.get_command_definition())
+        self.assertEqual(definition, register.get_command_definition(command_name))
 
 
 if __name__ == '__main__':
