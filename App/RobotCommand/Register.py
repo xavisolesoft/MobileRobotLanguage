@@ -1,4 +1,4 @@
-class CommandRegister:
+class Register:
     def __init__(self):
         self.command_name_to_definition = {}
 
@@ -9,7 +9,7 @@ class CommandRegister:
         self.command_name_to_definition[command_name] = command_definition
 
 
-class CommandDefinition:
+class Definition:
     def __init__(self,
                  request_class,
                  executor_class,

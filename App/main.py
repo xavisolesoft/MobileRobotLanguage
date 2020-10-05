@@ -1,10 +1,10 @@
 import sys
 
-import App.Application as Application
+import App.Application.System as System
 
 
 def main():
-    system_controller = Application.SystemController()
+    system_controller = System.Controller()
     system_controller.execute_in_commands(sys.stdin, sys.stdout)
 
 
