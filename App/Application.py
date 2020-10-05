@@ -2,7 +2,7 @@ import App.RobotLanguage as RobotLanguage
 import App.RobotModel as RobotModel
 import App.RobotCommand.Register as CommandRegister
 import App.RobotCommand.Control as CommandControl
-import App.PlaceCommand as PlaceCommand
+import App.PlaceCommand.InterpreterModelDefinition as PlaceCommandDefinition
 import App.ReportCommand as ReportCommand
 import App.MoveCommand.InterpreterModelDefinition as MoveCommandDefinition
 import App.LeftCommand.InterpreterModelDefinition as LeftCommandDefinition
@@ -25,7 +25,7 @@ class SystemController:
 
     @staticmethod
     def __init_command_register(command_register):
-        command_register.set_command_definition('PLACE', PlaceCommand.get_command_definition())
+        command_register.set_command_definition('PLACE', PlaceCommandDefinition.get_command_definition())
         command_register.set_command_definition('REPORT', ReportCommand.get_command_definition())
         command_register.set_command_definition('MOVE', MoveCommandDefinition.get_command_definition())
         command_register.set_command_definition('LEFT', LeftCommandDefinition.get_command_definition())
