@@ -84,6 +84,15 @@ class PlaceCommandTestCase(unittest.TestCase):
         output = Util.run_interactive_app(program)
         self.assertEqual(expected_output, output)
 
+    def test_one_place_with_inner_spaces(self):
+        program = '    PLACE    1,   1,    NORTH    \n' \
+                  '  REPORT \n'
+
+        expected_output = '1,1,NORTH\n'
+
+        output = Util.run_interactive_app(program)
+        self.assertEqual(expected_output, output)
+
 
 if __name__ == '__main__':
     unittest.main()

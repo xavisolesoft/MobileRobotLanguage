@@ -12,9 +12,19 @@ class Interpreter:
 
     @staticmethod
     def __extract_command(line):
+        tokens = line.replace(",", " ").split(" ")
+        tokens = Interpreter.__remove_string_list_spaces(tokens)
+        command_name, arguments = Interpreter.__split_tokens_by_command_arguments(tokens)
+        return command_name, arguments
+
+    @staticmethod
+    def __remove_string_list_spaces(string_list):
+        return list(filter(lambda a: a != "", string_list))
+
+    @staticmethod
+    def __split_tokens_by_command_arguments(tokens):
         command_name = ''
         arguments = []
-        tokens = line.replace(",", " ").split(" ")
         if tokens:
             command_name = tokens[0]
             arguments = tokens[1:]
