@@ -1,6 +1,7 @@
 import App.RobotLanguage as RobotLanguage
 import App.RobotModel as RobotModel
-import App.RobotCommand as RobotCommand
+import App.RobotCommand.Register as CommandRegister
+import App.RobotCommand.Control as CommandControl
 import App.PlaceCommand as PlaceCommand
 import App.ReportCommand as ReportCommand
 import App.MoveCommand as MoveCommand
@@ -11,8 +12,8 @@ import App.RightCommand as RightCommand
 class SystemController:
     def __init__(self):
         self.__world_model = RobotModel.WorldModel()
-        self.__command_register = RobotCommand.CommandRegister()
-        self.__command_controller = RobotCommand.CommandController(self.__world_model)
+        self.__command_register = CommandRegister.CommandRegister()
+        self.__command_controller = CommandControl.CommandController(self.__world_model)
         self.__interpreter = RobotLanguage.Interpreter(self.__command_register, self.__command_controller)
         self.__init_command_register(self.__command_register)
 

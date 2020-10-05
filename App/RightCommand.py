@@ -1,18 +1,18 @@
-import App.RobotCommand as RobotCommand
-import App.RobotModel as RobotModel
+import App.RobotCommand.Command as Command
+import App.RobotCommand.Register as CommandRegister
 
 
-class CommandRequest(RobotCommand.Request):
+class CommandRequest(Command.Request):
     def __init__(self):
         super().__init__()
 
 
-class CommandResponse(RobotCommand.Response):
+class CommandResponse(Command.Response):
     def __init__(self):
         super().__init__()
 
 
-class CommandExecutor(RobotCommand.Executor):
+class CommandExecutor(Command.Executor):
     def __init__(self, world_model):
         self.__world_model = world_model
 
@@ -41,7 +41,7 @@ def command_interpreter_output_generator(response):
 
 def get_command_definition():
     return \
-        RobotCommand.CommandDefinition(CommandRequest,
-                                       CommandExecutor,
-                                       set_request_arguments_from_input_interpreter_arguments,
-                                       command_interpreter_output_generator)
+        CommandRegister.CommandDefinition(CommandRequest,
+                                          CommandExecutor,
+                                          set_request_arguments_from_input_interpreter_arguments,
+                                          command_interpreter_output_generator)
