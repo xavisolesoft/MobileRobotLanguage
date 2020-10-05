@@ -18,7 +18,7 @@ class CommandExecutor(RobotCommand.Executor):
     def execute(self, request):
         response = super().execute(request)
         if not response.is_error():
-            self.__execute_move(request)
+            self.__execute_move(response)
         return response
 
     def __execute_move(self, response):
