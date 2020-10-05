@@ -4,7 +4,7 @@ import App.RobotCommand.Register as CommandRegister
 import App.RobotCommand.Control as CommandControl
 import App.PlaceCommand as PlaceCommand
 import App.ReportCommand as ReportCommand
-import App.MoveCommand as MoveCommand
+import App.MoveCommand.InterpreterModelDefinition as MoveCommandDefinition
 import App.LeftCommand.InterpreterModelDefinition as LeftCommandDefinition
 import App.RightCommand as RightCommand
 
@@ -27,6 +27,6 @@ class SystemController:
     def __init_command_register(command_register):
         command_register.set_command_definition('PLACE', PlaceCommand.get_command_definition())
         command_register.set_command_definition('REPORT', ReportCommand.get_command_definition())
-        command_register.set_command_definition('MOVE', MoveCommand.get_command_definition())
+        command_register.set_command_definition('MOVE', MoveCommandDefinition.get_command_definition())
         command_register.set_command_definition('LEFT', LeftCommandDefinition.get_command_definition())
         command_register.set_command_definition('RIGHT', RightCommand.get_command_definition())
