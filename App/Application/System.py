@@ -17,4 +17,4 @@ class Controller:
         for line in input_file:
             output_message = self.__interpreter.execute_line(line.strip())
             if output_message:
-                output_file.write_line(output_message)
+                output_file.write(output_message + "\n")
