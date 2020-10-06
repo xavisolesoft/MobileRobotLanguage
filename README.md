@@ -30,6 +30,27 @@ EXIT
 - The toy robot must not fall off the table during movement. This also includes the initial placement of the toy robot.
 - Any move that would cause the robot to fall must be ignored.
 
+### How to run the application
+
+```
+cd MobileRobotLaguage
+python App/main.py
+```
+
+### How to run a functional test
+
+```
+cd MobileRobotLaguage
+python Test/FunctionalTest/<Test_file_name>.py
+```
+
+### How to run a unit test
+
+```
+cd MobileRobotLaguage
+python Test/UnitTest/<Test_file_name>.py
+```
+
 ### Example Input and Output:
 
 #### Example a
