@@ -2,9 +2,7 @@ import sys
 import os.path
 import subprocess
 
-sys.path.extend([os.path.dirname(os.path.abspath(__file__)) + "/.."])
-
-sys.path.extend(["../.."])
+sys.path.extend([os.path.dirname(os.path.abspath(__file__)) + "/../.."])
 import Definitions
 sys.path.extend([Definitions.APP_PATH])
 

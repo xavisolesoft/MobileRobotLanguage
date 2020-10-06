@@ -1,4 +1,11 @@
 import unittest
+import sys
+import os.path
+
+sys.path.extend([os.path.dirname(os.path.abspath(__file__)) + "/../.."])
+import Definitions
+sys.path.extend([Definitions.APP_PATH])
+
 import App.Geometry as Geometry
 import App.RobotModel as RobotModel
 
