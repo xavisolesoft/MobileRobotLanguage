@@ -98,3 +98,6 @@ Expected output
 3,3,NORTH
 ```
 
+### Python version
+
+Python 3.6
