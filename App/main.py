@@ -1,4 +1,9 @@
 import sys
+import os.path
+
+sys.path.extend([os.path.dirname(os.path.abspath(__file__)) + "/.."])
+import Definitions
+sys.path.extend([Definitions.APP_PATH])
 
 import App.Application.System as System
 
