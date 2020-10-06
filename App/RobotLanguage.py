@@ -1,3 +1,6 @@
+import sys
+
+
 class Interpreter:
     def __init__(self, command_register, command_controller):
         self.command_register = command_register
@@ -5,10 +8,9 @@ class Interpreter:
 
     def execute_line(self, line):
         command_name, arguments = Interpreter.__extract_command(line)
-        command_definition = self.command_register.get_command_definition(command_name)
-        if command_definition:
-            return self.command_controller.execute_command(command_definition, arguments)
-        return ""
+        message = self.__execute_robot_command(command_name, arguments)
+        message += self.__execute_interpreter_command(command_name, arguments)
+        return message
 
     @staticmethod
     def __extract_command(line):
@@ -29,3 +31,15 @@ class Interpreter:
             command_name = tokens[0]
             arguments = tokens[1:]
         return command_name, arguments
+
+    def __execute_robot_command(self, command_name, arguments):
+        command_definition = self.command_register.get_command_definition(command_name)
+        if command_definition:
+            return self.command_controller.execute_command(command_definition, arguments)
+        return ""
+
+    @staticmethod
+    def __execute_interpreter_command(command_name, arguments):
+        if command_name == "EXIT":
+            sys.exit()
+        return ""
