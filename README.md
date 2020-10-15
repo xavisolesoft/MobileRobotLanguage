@@ -1,9 +1,32 @@
 # Mobile Robot Language
-- The application is a simulation of a toy robot moving on a square tabletop, of dimensions 5 units x 5 units.
-- There are no other obstructions on the table surface.
-- The robot is free to roam around the surface of the table, but must be prevented from falling to destruction. Any movement that would result in the robot falling from the table must be prevented, however further valid movement commands must still be allowed.
+Implementation for a mobile robot language simulator using Model-View-Controller architecture with command pattern, functional testing for all the system and unit testing of the more stable parts. 
 
-Create an application that can read in commands of the following form:
+- The application is a command line interactive application.
+- The map is a 5x5 board without obstacles.
+- The robot is not able to move outside the map (movement instruction with target outside the map will have no effect).
+
+## Architecture explanation
+
+The architecture is a decoupled Model-View-Controller to be able to implement more Views in the future or implement a new simulator_model/real_robot_model. Each command is implemented in a different module to be able to add new commands without modify other modules.
+
+### Modules
+
+- **RobotLanguage:** Contains the interpreter for the robot language and implements the generic part for the View.
+- **RobotModel:** Contains the implementation of the Model.
+- **RobotCommand:** Contains the generic part for the Controller implementation.
+- **[CommandName]Command:** Implementation for the specific part for each command.
+  - **Command:** Part of the Controller for this module independent from View and Model (Request and Response for the command controller).
+  - **InterpreterAdapter:** Transform functions from:
+    - Interpreter input (command argument string list) to command request.
+    - Command response to interpreter output (interpreter command output message).
+  - **RobotModelAdapter:** Implementation for the execution of the Controller, coupled to the Model and the Controller.
+  - **InterpreterModelDefinition:** Definition of all the functions and classes that need to be registered for a command.
+- **Application:** Controls the system execution; defines the commands and their implementation; and allocates all the sub parts of the system.
+- **Geometry:** Library for geometry representation and geometry operations.
+
+## Language description
+
+### Commands
 
 ```
 PLACE X,Y,F
